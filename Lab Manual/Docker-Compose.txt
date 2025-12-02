@@ -1,0 +1,71 @@
+Docker Compose file basic components
+Services 	: 	Defines Container
+Image		: 	Pulls or uses existing image
+Ports 		: 	port mapping
+Volumes 	: 	attach persistent storage
+Environment 	: 	env. Vars
+Depends_on 	: 	order of startup
+Restart 	: 	restart policy
+Networks 	: 	network configuration 
+
+
+Docker-compose.yml:
+services:
+  java-app:
+    build: ./java-app
+    container_name: java_container
+
+  python-app:
+    build: ./python-app
+    container_name: python_container
+
+  node-app:
+    build: ./node-app
+    container_name: node_container
+    ports:
+      - "3000:3000"   # host:container, so open http://localhost:3000 in browser
+
+
+java-app/Dockerfile:
+FROM openjdk:26-ea-trixie
+WORKDIR /home/mca1/Desktop/Test_compose/java-app
+COPY . .
+RUN javac Test.java
+WORKDIR /home/mca1/Desktop/Test_compose/java-app
+COPY . .
+CMD ["java", "Test"]
+
+Python-app/Dockerfile:
+FROM python:trixie
+WORKDIR /home/mca1/Desktop/Test_compose/python-app
+COPY . .
+CMD python Test.py
+
+
+node-app/Dockerfile:
+FROM node:iron-trixie-slim
+WORKDIR /home/mca1/Desktop/Test-App/node-app
+COPY . .
+EXPOSE 3000
+CMD ["node", "Test.js"]
+
+
+Test.js(Node):
+const http = require('http');
+
+const server = http.createServer((req, res) => {
+  res.statusCode = 200;
+  res.setHeader('Content-Type', 'text/html');
+  res.end('<h1>Hello from node</h1>');
+});
+
+server.listen(8964, () => {
+  console.log(`Server running at http://0.0.0.0:8964/`);
+});
+
+
+
+
+
+
+
