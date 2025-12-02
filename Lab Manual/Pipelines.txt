@@ -1,0 +1,56 @@
+Python:
+
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/your-username/your-repo.git'
+            }
+        }
+
+        stage('Run Python Script') {
+            steps {
+                echo 'Starting Python script...'
+                bat 'python demo.py'
+                echo 'Python script finished.'
+            }
+        }
+    }
+}
+
+
+Java:
+
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git url: 'https://github.com/your-username/your-repo.git'
+            }
+        }
+
+        stage('Compile Java') {
+            steps {
+                sh '''
+                    echo "Compiling Java..."
+                    javac Test.java
+                    echo "Compilation done."
+                '''
+            }
+        }
+
+        stage('Run Java') {
+            steps {
+                sh '''
+                    echo "Running Java program..."
+                    java Test
+                    echo "Java program finished."
+                '''
+            }
+        }
+    }
+}
