@@ -1,0 +1,226 @@
+-:1st and 2nd Ex:-
+
+sudo apt install openjdk-17-jdk
+sudo apt install maven
+mvn --version
+mvn archetype:generate
+
+Choose archetype: (press Enter for default)
+Select number 8 or later version
+groupId: com.example
+artifactId: simple-maven
+version: 1.0-SNAPSHOT (press Enter for default)
+package: com.example (press Enter for default)
+
+cd simple-maven
+mvn compile
+mvn package
+java -cp target/<SNAPSHOT.jar file> <package name>
+Example: java -cp target/simple-maven-1.0-SNAPSHOT.jar com.example.App
+
+ 
+
+TO MODIFY ANY CODE FOR DIFFERENT OUTPUT:-
+nano src/main/java/com/example/App.java
+
+MAKE THE CHANGES IN THIS FILE
+
+ 
+
+NOW PUSH TO GIT:-
+git init
+git add .
+git commit -m "Initial Commit"
+git remote add origin git@github.com:<username>/repository_name.git
+git push -u origin master/main
+
+ 
+
+NOW CREATE AN ITEM IN JENKINS:-
+sudo systemctl enable jenkins
+sudo systemctl start jenkins
+Create an new item - "First Maven Project"
+Project Style - Pipeline
+In Configuration -> Pipeline SCM -> Select Git -> Copy and paste the Git Repo URL -> Select you branch Master/Main, then Select the Script path as "Jenkinsfile"
+
+pipeline {
+    agent any
+    stages {
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/<username>/Test_Prep.git'
+            }
+        }
+        stage('Maven Test') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+        stage('Maven Build') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+        stage('Maven Run') {
+            steps {
+                sh 'java -cp target/simple-maven-1.0-SNAPSHOT.jar com.example.App'
+            }
+        }
+    }
+}
+
+Then Apply -> Save -> Build Now
+
+ 
+
+NOW GO TO DOCKER FOR BUILDING IMAGE:-
+sudo systemctl enable docker
+sudo systemctl start docker
+
+ 
+
+Create Dockerfile:-
+nano Dockerfile
+FROM eclipse-temurin:17-jdk
+WORKDIR /simple-maven
+COPY target/*.jar app.jar
+EXPOSE 3000
+CMD ["java","-jar","app.jar"]
+
+ 
+
+SET MAIN CLASS IN pom.xml FILE:-
+<plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-jar-plugin</artifactId>
+      <version>3.3.0</version>
+      <configuration>
+        <archive>
+          <manifest>
+            <mainClass>com.example.App</mainClass>
+          </manifest>
+        </archive>
+      </configuration>
+    </plugin>
+Add the above code in pom.xml file inside <build><pluginManagement><plugin> "COPY PASTE THE CODE HERE" </plugin></pluginManagement></build>
+
+ 
+
+sudo docker build -t mymaven .
+sudo docker run -p 3000:300 mymaven
+
+ 
+
+NOW CREATE A REPO IN DOCKERHUB AND PUSH THE IMAGE:-
+Enter Repo name: first-maven -> Create
+sudo docker tag mymaven <docker_username>/first-maven:1.0
+docker push <docker_username>/first-maven:1.0 
+docker run <docker_username>/first-maven:1.0
+
+ 
+
+ 
+
+-:3rd and 4th Ex:-
+
+JENKINS CRON:-
+triggers {
+        cron('* * * * *')
+    }
+Add the above code inside the jenknis file pipeline { }
+
+ 
+
+KUBERNETES:-
+minikube start
+minikube dashboard
+
+ 
+
+FOR WEBSITES REACTJS/FLASK USE FOLLOWING COMMAND (CREATING PODS):-
+kubectl run <pod_name> --image=<docker_username>/mymaven:1.0 --port=8080
+kubectl get pods
+
+ 
+
+FOR MAVEN-JAVA PROGRAM USE FOLLOWING COMMAND (CREATING JOBS):-
+kubectl create job <job_name> --image=<docker_username>/<image_name>:1.0
+kubectl get jobs
+
+ 
+
+REACTJS:
+
+npx create-react-app react-app
+cd react-app
+
+ 
+
+FLASK:
+
+mkdir flask-app && cd flask-app
+
+python3 -m venv venv
+
+ 
+
+python3 -m venv venv
+source venv/bin/activate
+pip install flask
+
+ 
+
+app.py
+
+from flask import Flask
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return "Hello from Flask in Kubernetes!"
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
+
+ 
+
+DOCKER FILES:-
+
+    MAVEN:
+
+FROM eclipse-temurin:17-jdk
+WORKDIR /simple-maven
+COPY target/*.jar app.jar
+EXPOSE 3000
+CMD ["java","-jar","app.jar"]
+
+ 
+
+2. FLASK:
+FROM python:3.10-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY . .
+EXPOSE 5000
+CMD ["python", "app.py"]
+
+ 
+
+REQUIREMENTS.TXT
+
+flask
+
+ 
+
+3.REACT:
+
+FROM node:18
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm install
+COPY . .
+EXPOSE 3000
+CMD ["npm", "start"]
+
+
