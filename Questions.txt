@@ -1,0 +1,18 @@
+1.Maven+Java+Docker Swarm (Manual/On-demand Pipeline)
+
+Design and implement a CI/CD pipeline for a Java application built using Maven. Use Git/GitHub for version control, Jenkins for pipeline execution, and Docker for containerization. Deploy the containerized application on Docker Swarm and explain each stage of the pipeline during execution.
+
+
+2.Maven+Java+Docker Swarm (Cron-based Automated Pipeline)
+
+Develop a Java application using Maven and implement a fully automated CI/CD pipeline using Git/Github.Jenkins and Docker.Configure Jenkins cron-based triggers to automatically initiate the pipeline.Containerize the application and deploy it on Docker Swarm. Explain each automated stage of the pipeline
+
+
+3.Maven+Java+Kubernetes(Manual/On-demand Pipeline)
+
+Create a CI/CD pipeline for a Maven-based Java application using Git/GitHub, Jenkins, and Docker.Deploy the containerized application on a kubernetes cluster and demonstrate the execution of each pipeline stage.
+
+
+4.Maven+Java+Kubernetes (Cron based Automated Pipeline)
+
+Build a Java Application using Maven and configure a fully automated CI/CD pipeline with Git/GitHub, Jenkins and Docker.USe Jenkins cron jobs to trigger the pipeline automatically and deploy the application on Kubernetes. Explain all automated stages of the pipeline
